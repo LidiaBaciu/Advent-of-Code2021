@@ -1,6 +1,6 @@
 import numpy as np
 
-from utils import read_file
+from utils import read_file, parse_command
 
 
 def day1():
@@ -18,4 +18,35 @@ def day1():
         sum(window) for window in zip(measurements, measurements[1:], measurements[2:])
     )))
     
-day1()
+def day2():
+    commands = tuple(map(parse_command, read_file('input.txt')))
+    
+    horizontal = 0
+    depth = 0
+    
+    for command, amount in commands:
+        match command:
+            case "forward": horizontal += amount
+            case "down": depth += amount
+            case "up": depth -= amount
+            case _:
+                raise AssertionError
+            
+    print(horizontal * depth)
+    
+    # Part 2
+    horizontal = depth = aim = 0
+    
+    for command, amount in commands:
+        match command:
+            case "forward": 
+                horizontal += amount
+                depth += amount * aim
+            case "down": aim += amount
+            case "up": aim -= amount
+            case _:
+                raise AssertionError
+            
+    print(horizontal * depth)
+
+day2()
